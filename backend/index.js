@@ -1,11 +1,12 @@
 const express = require("express");
 const { createTodo, updateTodo } = require("./types");
+const { todo } = require("./db");
 const PORT = 3200;
 const app = express();
 
 app.use(express.json());
 
-app.post("/todos", function (req, res) {
+app.post("/todos", async function (req, res) {
     const createPayload = req.body;
     const parsedPayload = updateTodo.safeParse(createPayload);
     if (!parsedPayload.success) {
@@ -14,13 +15,25 @@ app.post("/todos", function (req, res) {
         })
         return;
     }
+    await todo.create({
+        title: createPayload.title,
+        description: createPayload.description,
+        completed: false
+    })
+
+    res.json({
+        msg: "Todo Created"
+    })
 })
 
-app.get("/todos", function (req, res) {
+app.get("/todos", async function (req, res) {
+    const todos = await todo.find({});
+    res.json({
+        todos
+    })
+});
 
-})
-
-app.post("/completed", function (req, res) {
+app.post("/completed", async function (req, res) {
     const upadatePayload = req.body;
     const safePayload = createTodo.safeParse(upadatePayload);
     if (!safePayload.success) {
@@ -29,6 +42,11 @@ app.post("/completed", function (req, res) {
         })
         return;
     }
+    await todo.update({
+        _id: req.body.id
+    }, {
+        completed: true
+    })
 })
 
 app.listen(function () {

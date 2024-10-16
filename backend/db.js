@@ -12,3 +12,5 @@ const todo = mongoose.model("todos", todoSchema);
 module.exports = {
     todo
 }
+
+// mongodb+srv://aakashrambhad08:ToB81AebIDyVHiK7@cluster5.gz18r.mongodb.net/todos

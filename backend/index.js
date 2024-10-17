@@ -1,14 +1,13 @@
 const express = require("express");
 const { createTodo, updateTodo } = require("./types");
 const { todo } = require("./db");
-const PORT = 3200;
 const app = express();
 
 app.use(express.json());
 
-app.post("/todos", async function (req, res) {
+app.post("/todo", async function (req, res) {
     const createPayload = req.body;
-    const parsedPayload = updateTodo.safeParse(createPayload);
+    const parsedPayload = createTodo.safeParse(createPayload);
     if (!parsedPayload.success) {
         res.status(411).json({
             msg: "You send a wrong inputs",
@@ -18,7 +17,7 @@ app.post("/todos", async function (req, res) {
     await todo.create({
         title: createPayload.title,
         description: createPayload.description,
-        completed: false
+        Completed: false
     })
 
     res.json({
@@ -35,7 +34,7 @@ app.get("/todos", async function (req, res) {
 
 app.post("/completed", async function (req, res) {
     const upadatePayload = req.body;
-    const safePayload = createTodo.safeParse(upadatePayload);
+    const safePayload = updateTodo.safeParse(upadatePayload);
     if (!safePayload.success) {
         req.status(411).json({
             msg: "Not a valid Inputs"
@@ -49,6 +48,6 @@ app.post("/completed", async function (req, res) {
     })
 })
 
-app.listen(function () {
-    `port is running in ${PORT}`
-})
+app.listen(3000, function () {
+    console.log("Server Started");
+});
